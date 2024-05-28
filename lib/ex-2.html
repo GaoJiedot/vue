@@ -1,0 +1,68 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+<div id="app">
+ <h1>{{title}}</h1> <br>
+ <hr>
+ 商名：<input type="text" v-model.trim="event_title"> <br>
+ 价格：<input type="text"v-model.trim="event_content"> <br>
+ <button @click ="addEvent">添加</button>
+ <hr>
+ <ul>
+    <li v-for="(event,index) in eventList":key="index">
+        序号：{{event.id}},价格：{{event.title}},名称：{{event.content}}
+        <button @click ="editEvent(index)">编辑</button>
+        <button @click="deletEvent(index)">删除</button>
+    </li>
+ </ul>
+</div>
+<script type="module">
+    import{createApp,ref,reactive} from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
+
+    createApp({
+        setup() {
+            const event_title=ref("")
+            const event_content=ref("")
+            const event_next_id=ref(2)
+            const eventList=reactive([{id:1,title:"12", content:"辣条"}])
+        const addEvent=()=>{
+            if(event_title.value!=""&&event_content.value!=""){
+                eventList.push({id:event_next_id.value++, content:event_title.value,title:event_content.value})
+                event_title.value=""
+                event_content.value=""
+            
+            }
+            
+        }
+        const editEvent=(index)=>{
+            const editContent=prompt('编辑事件内容', eventList[index].content);
+            if(editContent!=null)
+            eventList[index].content=editContent
+             
+        }
+        const deletEvent=(index)=>{
+            if(confirm("确认是否删除该事件")){
+                eventList.splice(index,1)
+            }
+            }
+            return {
+                title:"购物车",
+                event_title,
+                event_content,
+                eventList,
+                addEvent,
+                editEvent,
+                deletEvent
+            }
+        }
+    }).mount('#app')
+</script>
+</body>
+</html>

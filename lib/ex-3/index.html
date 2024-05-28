@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>商品列表</title>
+    <style>
+        .product-card {
+            float: left;
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+            padding: 10px;
+            width: 300px;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 430px;
+        }
+
+        .product-title {
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        .product-description {
+            margin-top: 5px;
+        }
+
+        .product-price {
+            margin-top: 5px;
+            color: black;
+        }
+
+        .discount-price {
+            font-weight: bold;
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+<div id="app">
+    <div class="product-list">
+        <div class="product-card" v-for="product in products" :key="product.id">
+            <img class="product-image" :src="product.image" alt="商品图片"/>
+            <div class="product-title">{{ product.title }}</div>
+            <div class="product-description">{{ product.description }}</div>
+            <div class="product-price">
+                价格：
+                <span v-if="product.discount" :class="{ 'discount-price': product.discount }">{{product.discountPrice }}</span>
+                <span v-if="product.discount" style="text-decoration: line-through;">{{product.price }}</span>
+                <span v-else>{{ product.price }}</span>
+            </div>
+            <div>
+                <input type="number" v-model="product.quantity" min="1">
+                <button @click="addToCart(product)">加入购物车</button>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <h2>购物车</h2>
+        <div v-for="(item, index) in cart" :key="index">
+            {{ item.title }} - ￥{{ item.price }} x {{ item.quantity }}
+            <button @click="removeFromCart(index)">移除</button>
+        </div>
+        <div>
+            总价：￥{{ total }}
+        </div>
+    </div>
+</div>
+
+<script src="https://unpkg.com/vue@3"></script>
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                products: [
+                    {
+                        id: 1,
+                        title: '商品一',
+                        description: '这是商品一的描述',
+                        price: 100,
+                        discount: true,
+                        discountPrice: 80,
+                        image: 'https://img.ithome.com/newsuploadfiles/2024/3/9eb169ad-db22-4746-95c8-f6285be1074b.jpg?x-bce-process=image/format,f_auto',
+                        quantity: 1
+                    },
+                    {
+                        id: 2,
+                        title: '商品二',
+                        description: '这是商品二的描述',
+                        price: 120,
+                        image: 'https://img.ithome.com/newsuploadfiles/2024/3/9eb169ad-db22-4746-95c8-f6285be1074b.jpg?x-bce-process=image/format,f_auto',
+                        quantity: 1
+                    },
+                    {
+                        id: 3,
+                        title: '商品三',
+                        description: '这是商品三的描述',
+                        price: 80,
+                        image: 'https://img.ithome.com/newsuploadfiles/2024/3/9eb169ad-db22-4746-95c8-f6285be1074b.jpg?x-bce-process=image/format,f_auto',
+                        quantity: 1
+                    },
+                ],
+                cart: []
+            }
+        },
+        computed: {
+            total() {
+                return this.cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+            }
+        },
+        methods: {
+            addToCart(product) {
+                const index = this.cart.findIndex(item => item.id === product.id);
+                if (index !== -1) {
+                    this.cart[index].quantity += product.quantity;
+                } else {
+                    this.cart.push({...product});
+                }
+            },
+            removeFromCart(index) {
+                this.cart.splice(index, 1);
+            }
+        }
+    });
+
+    app.mount('#app');
+</script>
+</body>
+
+</html>
