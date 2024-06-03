@@ -8,7 +8,14 @@ export  const UseMainStore= defineStore('main', {
         }
     },
     getters:{
-        AddNum: state => state.add+=1,
-        SubNum: state => state.sub-=1,
+        AddNum(){
+            this.add+=1
+        } ,
+        SubNum(){
+            this.sub-=1
+        },
+    },
+    action:{
+
     }
 })
