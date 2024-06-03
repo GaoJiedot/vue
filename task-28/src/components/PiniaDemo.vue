@@ -13,10 +13,6 @@ import  {UseMainStore} from '../store/index.js'
 //引入pinia，并使用
 import { storeToRefs } from 'pinia';
 const store = UseMainStore()
-
-
-
-
 </script>
 
 
